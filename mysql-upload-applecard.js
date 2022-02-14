@@ -56,7 +56,7 @@ function importCSVintoMySql(conn, theBlob, rowIncludeFlag, bqProjectId, bqDatase
 
 	console.log(theBlob)
 
-	conn.query('insert into coejr_learning.tbl_gasbill2(transactionDate, transactionAmount, transactionStatus) VAlUES ?', [theBlob], function(err, rows) {
+	conn.query('insert into coejr_learning.tbl_applecardtransactions(transactionDate, clearingDate, transactionDescription, transactionMerchant, transactionCategory, transactionType, transactionAmount, transactionPurchaser) VAlUES ?', [theBlob], function(err, rows) {
 			if(err) {
 				console.error('Failure occurred: ' + err.message)
 			}
@@ -140,9 +140,9 @@ function getCSVContentArray(conn, theCSVIds, theProjectId, theDataSetId, theTabl
 		for(j = 0; j < firstFileDataRow.length; j++) {
 			if(!isNaN(parseFloat(firstFileDataRow[j][1]))) {
 				t_db_transactionDate = dateFix(firstFileDataRow[j][0])
-				t_db_transactionAmount = amountFix(firstFileDataRow[j][1])
-				t_db_transactionAmount_p = parseFloat(t_db_transactionAmount)
-				valueArray.push([t_db_transactionDate, parseFloat(t_db_transactionAmount), firstFileDataRow[j][2]])
+				t_db_clearingDate = dateFix(firstFileDataRow[j][1])
+				t_db_transactionAmount = amountFix(firstFileDataRow[j][6])
+				valueArray.push([t_db_transactionDate, t_db_clearingDate, firstFileDataRow[j][2], firstFileDataRow[j][3], firstFileDataRow[j][4], firstFileDataRow[j][5], parseFloat(t_db_transactionAmount), firstFileDataRow[j][7]])
 			} else {
 				headerArray.push([firstFileDataRow[j][0], firstFileDataRow[j][1], firstFileDataRow[j][2]])
 			}
@@ -190,7 +190,7 @@ function getCSVFiles(conn, theFolderName, theProjectId, theDataSetId, theTableId
 
 function main(conn) {
   projectId = "midyear-glazing-196002"
-  folderName = "rcjGasBillPaymentHistory"
+  folderName = "rcjAppleCardTransactions"
   datasetId = 'ds_' + new Date().getTime()
   tableId = 'tbl_gasbill'
 

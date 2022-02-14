@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mysql = require('mysql');
 
 var conn = mysql.createConnection({
@@ -14,5 +15,6 @@ conn.connect( function(err) {
 
 	if(err) throw err;
 	console.log("Connected!")
+	conn.end()
 
 });
