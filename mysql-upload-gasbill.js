@@ -1,3 +1,5 @@
+
+require('dotenv').config();
 const mysql = require('mysql');
 const path = require('path');
 const fs = require('fs');
@@ -54,7 +56,7 @@ function importCSVintoMySql(conn, theBlob, rowIncludeFlag, bqProjectId, bqDatase
 
 	console.log(theBlob)
 
-	conn.query('insert into coejr_learning.tbl_gasbill(transactionDate, transactionAmount, transactionStatus) VAlUES ?', [theBlob], function(err, rows) {
+	conn.query('insert into coejr_learning.tbl_gasbill2(transactionDate, transactionAmount, transactionStatus) VAlUES ?', [theBlob], function(err, rows) {
 			if(err) {
 				console.error('Failure occurred: ' + err.message)
 			}
@@ -212,8 +214,12 @@ function connectUp() {
 	var connection = mysql.createConnection( {
 		user: process.env.MYSQL_USER,
 		host: process.env.MYSQL_URI,
-		password: process.env.MYSQL_PASSWORD,
+		password: process.env.MYSQL_PASSWORD
 	});
+
+	connection.user = process.env.MYSQL_USER
+	connection.host = process.env.MYSQL_URI
+	connection.password = process.env.MYSQL_PASSWORD
 
 	connection.connect(
 		function(err, conn) {
@@ -228,6 +234,8 @@ function connectUp() {
 
 		}
 	);
+	console.log(connection.user)
+	console.log(connection.host)
 /*
 	connection.execute({
 		// sqlText: 'use warehouse COMPUTE_WH_XL; insert into COEJR_LEARNING.COE_SANDBOX.COE_GASBILL(transactionDate, transactionStatus) VAlUES(?, ?)',
